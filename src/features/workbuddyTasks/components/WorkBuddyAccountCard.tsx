@@ -1,10 +1,16 @@
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getAuthFileIcon } from '@/features/authFiles/constants';
 import { useThemeStore } from '@/stores';
 import { formatDateTimeValue } from '@/utils/format';
 import type { ResolvedTheme } from '@/types';
 import { buildTaskRows, primitiveDataEntries, taskStatusTone } from '../logic';
-import type { WorkBuddyAccountView, WorkBuddyTaskStatusView, WorkBuddyTaskTone } from '../types';
+import type {
+  WorkBuddyAccountView,
+  WorkBuddyTaskSpecView,
+  WorkBuddyTaskStatusView,
+  WorkBuddyTaskTone,
+} from '../types';
 import styles from './WorkBuddyAccountCard.module.scss';
 
 const TONE_CLASS: Record<WorkBuddyTaskTone, string> = {
@@ -59,11 +65,38 @@ function TaskDetails({ state, noneLabel }: { state?: WorkBuddyTaskStatusView; no
   );
 }
 
-export function WorkBuddyAccountCard({ account }: { account: WorkBuddyAccountView }) {
+function ScheduleCell({ spec, noneLabel }: { spec?: WorkBuddyTaskSpecView; noneLabel: string }) {
+  const { t } = useTranslation();
+  if (!spec) return <span className={styles.muted}>{noneLabel}</span>;
+
+  const schedule = spec.dailyAt
+    ? t('workbuddy_tasks.schedule_daily', { time: spec.dailyAt })
+    : spec.interval
+      ? t('workbuddy_tasks.schedule_interval', { interval: spec.interval })
+      : noneLabel;
+
+  return (
+    <span className={styles.schedule}>
+      <span>{schedule}</span>
+      {!spec.enabled ? (
+        <span className={styles.scheduleOff}>{t('workbuddy_tasks.schedule_disabled')}</span>
+      ) : null}
+    </span>
+  );
+}
+
+export function WorkBuddyAccountCard({
+  account,
+  specs,
+}: {
+  account: WorkBuddyAccountView;
+  specs: WorkBuddyTaskSpecView[];
+}) {
   const { t, i18n } = useTranslation();
   const resolvedTheme: ResolvedTheme = useThemeStore((state) => state.resolvedTheme);
   const iconSrc = getAuthFileIcon('workbuddy', resolvedTheme);
   const rows = buildTaskRows(account);
+  const specByName = useMemo(() => new Map(specs.map((spec) => [spec.name, spec])), [specs]);
   const locale = i18n.language;
   const noneLabel = t('workbuddy_tasks.none');
   const updated = formatDateTimeValue(account.updatedAt, locale);
@@ -112,6 +145,7 @@ export function WorkBuddyAccountCard({ account }: { account: WorkBuddyAccountVie
           <thead>
             <tr>
               <th scope="col">{t('workbuddy_tasks.col_task')}</th>
+              <th scope="col">{t('workbuddy_tasks.col_schedule')}</th>
               <th scope="col">{t('workbuddy_tasks.col_status')}</th>
               <th scope="col">{t('workbuddy_tasks.col_last_run')}</th>
               <th scope="col">{t('workbuddy_tasks.col_next_retry')}</th>
@@ -128,6 +162,9 @@ export function WorkBuddyAccountCard({ account }: { account: WorkBuddyAccountVie
                   <th scope="row" className={styles.taskName}>
                     {t(`workbuddy.taskNames.${row.name}`, { defaultValue: row.name })}
                   </th>
+                  <td className={styles.scheduleCell}>
+                    <ScheduleCell spec={specByName.get(row.name)} noneLabel={noneLabel} />
+                  </td>
                   <td>
                     <span className={`${styles.status} ${TONE_CLASS[tone]}`}>
                       {t(STATUS_KEY[tone])}

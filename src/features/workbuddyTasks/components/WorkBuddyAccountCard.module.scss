@@ -139,7 +139,7 @@
 
 .table {
   width: 100%;
-  min-width: 720px;
+  min-width: 820px;
   border-collapse: collapse;
   font-size: 13px;
 }
@@ -191,6 +191,31 @@
 .instant {
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+}
+
+/* ---------- Schedule ---------- */
+
+.scheduleCell {
+  white-space: nowrap;
+}
+
+.schedule {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.scheduleOff {
+  display: inline-flex;
+  align-items: center;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: $radius-full;
+  background: color-mix(in srgb, var(--text-tertiary) 12%, transparent);
+  color: var(--text-tertiary);
+  font-size: 10.5px;
+  font-weight: 600;
+  line-height: 1;
 }
 
 .failures {

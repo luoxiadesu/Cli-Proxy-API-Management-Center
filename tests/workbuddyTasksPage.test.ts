@@ -211,7 +211,11 @@ describe('WorkBuddy account card', () => {
     });
 
     const markup = renderToStaticMarkup(
-      createElement(I18nextProvider, { i18n }, createElement(WorkBuddyAccountCard, { account }))
+      createElement(
+        I18nextProvider,
+        { i18n },
+        createElement(WorkBuddyAccountCard, { account, specs: [] })
+      )
     );
 
     Object.values(en.workbuddy.taskNames).forEach((label) => {
@@ -226,6 +230,33 @@ describe('WorkBuddy account card', () => {
     expect(markup).toContain(en.workbuddy_tasks.none);
     expect(markup).toContain('<caption');
     expect(markup).toContain('scope="col"');
+  });
+
+  test('renders each task schedule and marks disabled specs as off', () => {
+    const account = accountFixture({
+      tasks: {
+        checkin: state({ lastStatus: 'ok' }),
+        balance: state({ lastStatus: 'ok' }),
+        keepalive: state(),
+      },
+    });
+    const specs = [
+      { name: 'checkin', enabled: true, dailyAt: '08:00' },
+      { name: 'balance', enabled: true, interval: '6h' },
+      { name: 'keepalive', enabled: false, interval: '1h' },
+    ];
+
+    const markup = renderToStaticMarkup(
+      createElement(
+        I18nextProvider,
+        { i18n },
+        createElement(WorkBuddyAccountCard, { account, specs })
+      )
+    );
+
+    expect(markup).toContain('Daily 08:00');
+    expect(markup).toContain('Every 6h');
+    expect(markup).toContain(en.workbuddy_tasks.schedule_disabled);
   });
 });
 
@@ -266,6 +297,10 @@ describe('WorkBuddy tasks page wiring', () => {
       'account_updated',
       'tasks_heading',
       'col_task',
+      'col_schedule',
+      'schedule_daily',
+      'schedule_interval',
+      'schedule_disabled',
       'col_status',
       'col_last_run',
       'col_next_retry',

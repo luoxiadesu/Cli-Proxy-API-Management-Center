@@ -178,7 +178,7 @@ export function WorkBuddyTasksPage() {
           ) : (
             <div className={styles.grid}>
               {accounts.map((account) => (
-                <WorkBuddyAccountCard key={account.authId} account={account} />
+                <WorkBuddyAccountCard key={account.authId} account={account} specs={data.tasks} />
               ))}
             </div>
           )}
