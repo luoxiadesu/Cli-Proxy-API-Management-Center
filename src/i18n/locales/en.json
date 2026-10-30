@@ -1077,6 +1077,20 @@
     "copy_success": "Log copied to clipboard",
     "copy_failed": "Copy failed"
   },
+  "workbuddy": {
+    "taskNames": {
+      "checkin": "Check-in",
+      "balance": "Balance",
+      "keepalive": "Keep-alive",
+      "report": "Report",
+      "growth": "Growth",
+      "travel": "Travel",
+      "night-owl": "Night owl",
+      "sweep": "Sweep",
+      "compensation": "Compensation",
+      "streak": "Streak"
+    }
+  },
   "config_management": {
     "title": "Config Panel",
     "meta_fields": "{{count}} settings",
@@ -1297,6 +1311,10 @@
         "no_results": "No matching settings"
       },
       "sections": {
+        "workbuddy": {
+          "title": "WorkBuddy",
+          "description": "Scheduled tasks for WorkBuddy accounts: scheduler switches, timeouts, and per-task overrides"
+        },
         "common": {
           "title": "Common",
           "description": "The most-used settings, backed by the same data as the full sections"
@@ -1511,6 +1529,31 @@
           "strong": "Strong"
         }
       },
+      "workbuddy": {
+        "enabled_label": "Enable scheduled tasks",
+        "enabled_hint": "Master switch for the WorkBuddy scheduler. When off, no tasks run even if individual tasks are enabled.",
+        "state_dir_label": "State directory",
+        "state_dir_hint": "Directory for scheduler state. Leave empty to use the backend default.",
+        "workers_label": "Workers",
+        "workers_hint": "Maximum concurrent task workers (0-64). Leave empty to use the backend default.",
+        "request_timeout_label": "Request timeout",
+        "request_timeout_hint": "Timeout for each upstream request, for example 30s. Leave empty to use the backend default.",
+        "timezone_label": "Timezone",
+        "timezone_hint": "IANA timezone used to evaluate daily schedules, for example Asia/Shanghai. Leave empty to use the backend default.",
+        "tasks_label": "Tasks",
+        "tasks_hint": "Per-task overrides. Leave a field empty to inherit the backend default; \"Default\" leaves the enabled state unchanged.",
+        "table_task": "Task",
+        "table_enabled": "Enabled",
+        "table_interval": "Interval",
+        "table_daily_at": "Daily at",
+        "table_timeout": "Timeout",
+        "enabled_default": "Default",
+        "enabled_on": "Enabled",
+        "enabled_off": "Disabled",
+        "placeholder_interval": "24h",
+        "placeholder_daily_at": "08:00",
+        "placeholder_timeout": "30s"
+      },
       "payload_rules": {
         "rule": "Rule",
         "models": "Applicable Models",
@@ -1562,6 +1605,9 @@
         "boolean_false": "false"
       },
       "validation": {
+        "integer_range_0_64": "Enter a whole number between 0 and 64",
+        "invalid_daily_at": "Use a 24-hour time such as 08:00",
+        "invalid_workbuddy_tasks": "Fix the highlighted task schedule fields",
         "invalid_trusted_proxies": "Each trusted proxy must be a valid IP address or CIDR.",
         "invalid_discovery_service_type": "Use _name._tcp: name must be 1–15 letters, digits or hyphens, with no leading or trailing hyphen.",
         "validation_blocked": "Fix validation errors before saving",

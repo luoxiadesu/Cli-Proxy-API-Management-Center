@@ -1104,6 +1104,20 @@
     "copy_success": "已複製記錄原文",
     "copy_failed": "複製失敗"
   },
+  "workbuddy": {
+    "taskNames": {
+      "checkin": "簽到",
+      "balance": "餘額",
+      "keepalive": "保活",
+      "report": "報告",
+      "growth": "成長",
+      "travel": "出行",
+      "night-owl": "夜貓子",
+      "sweep": "清掃",
+      "compensation": "補償",
+      "streak": "連續打卡"
+    }
+  },
   "config_management": {
     "title": "設定面板",
     "meta_fields": "{{count}} 項設定",
@@ -1324,6 +1338,10 @@
         "no_results": "沒有符合的設定項"
       },
       "sections": {
+        "workbuddy": {
+          "title": "WorkBuddy",
+          "description": "WorkBuddy 帳號的排程任務：排程開關、逾時與各任務覆寫設定"
+        },
         "common": {
           "title": "常用",
           "description": "最常調整的設定項，與完整分區共享同一份資料"
@@ -1538,6 +1556,31 @@
           "strong": "很強"
         }
       },
+      "workbuddy": {
+        "enabled_label": "啟用排程任務",
+        "enabled_hint": "WorkBuddy 排程器總開關。關閉後即使個別任務已啟用也不會執行。",
+        "state_dir_label": "狀態目錄",
+        "state_dir_hint": "排程器狀態目錄。留空使用後端預設值。",
+        "workers_label": "工作執行緒數",
+        "workers_hint": "並行任務執行緒上限（0–64）。留空使用後端預設值。",
+        "request_timeout_label": "請求逾時",
+        "request_timeout_hint": "每次上游請求的逾時時間，例如 30s。留空使用後端預設值。",
+        "timezone_label": "時區",
+        "timezone_hint": "用於計算每日排程的 IANA 時區，例如 Asia/Shanghai。留空使用後端預設值。",
+        "tasks_label": "任務",
+        "tasks_hint": "各任務覆寫設定。留空沿用後端預設值；「預設」表示不變更啟用狀態。",
+        "table_task": "任務",
+        "table_enabled": "啟用",
+        "table_interval": "間隔",
+        "table_daily_at": "每日時間",
+        "table_timeout": "逾時",
+        "enabled_default": "預設",
+        "enabled_on": "啟用",
+        "enabled_off": "停用",
+        "placeholder_interval": "24h",
+        "placeholder_daily_at": "08:00",
+        "placeholder_timeout": "30s"
+      },
       "payload_rules": {
         "rule": "規則",
         "models": "適用模型",
@@ -1589,6 +1632,9 @@
         "boolean_false": "false"
       },
       "validation": {
+        "integer_range_0_64": "請輸入 0 到 64 之間的整數",
+        "invalid_daily_at": "請使用 24 小時制時間，例如 08:00",
+        "invalid_workbuddy_tasks": "請修正醒目標示的任務排程欄位",
         "invalid_trusted_proxies": "每個可信任代理必須是有效的 IP 位址或 CIDR。",
         "invalid_discovery_service_type": "請使用 _名稱._tcp 格式：名稱為 1–15 位英文字母、數字或連字號，首尾不能是連字號。",
         "validation_blocked": "請先修復表單驗證錯誤再儲存",

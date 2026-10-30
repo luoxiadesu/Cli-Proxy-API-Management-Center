@@ -9,7 +9,7 @@
 // extra entry anywhere fails CI.
 
 export type VisualSectionId =
-  'connectivity' | 'network' | 'logging' | 'streaming' | 'advanced' | 'payload';
+  'connectivity' | 'network' | 'logging' | 'streaming' | 'advanced' | 'payload' | 'workbuddy';
 
 export interface ConfigFieldSearchEntry {
   /** Stable anchor id; matches FieldAnchor's `fieldId` and the rendered DOM id. */
@@ -713,6 +713,67 @@ export const CONFIG_FIELD_SEARCH_INDEX: ConfigFieldSearchEntry[] = [
     labelKey: L('sections.payload.filter_rules'),
     hintKey: L('sections.payload.filter_rules_desc'),
     keywords: ['payload', 'rule', 'filter'],
+  },
+  {
+    fieldId: 'workbuddyEnabled',
+    sectionId: 'workbuddy',
+    labelKey: L('workbuddy.enabled_label'),
+    hintKey: L('workbuddy.enabled_hint'),
+    yamlKeys: ['workbuddy', 'enabled'],
+    keywords: ['workbuddy', 'tasks', 'scheduler'],
+  },
+  {
+    fieldId: 'workbuddyStateDir',
+    sectionId: 'workbuddy',
+    labelKey: L('workbuddy.state_dir_label'),
+    hintKey: L('workbuddy.state_dir_hint'),
+    yamlKeys: ['workbuddy', 'state-dir'],
+    keywords: ['workbuddy', 'state', 'directory'],
+  },
+  {
+    fieldId: 'workbuddyWorkers',
+    sectionId: 'workbuddy',
+    labelKey: L('workbuddy.workers_label'),
+    hintKey: L('workbuddy.workers_hint'),
+    yamlKeys: ['workbuddy', 'workers'],
+    keywords: ['workbuddy', 'workers', 'concurrency'],
+  },
+  {
+    fieldId: 'workbuddyRequestTimeout',
+    sectionId: 'workbuddy',
+    labelKey: L('workbuddy.request_timeout_label'),
+    hintKey: L('workbuddy.request_timeout_hint'),
+    yamlKeys: ['workbuddy', 'request-timeout'],
+    keywords: ['workbuddy', 'timeout', 'duration'],
+  },
+  {
+    fieldId: 'workbuddyTimezone',
+    sectionId: 'workbuddy',
+    labelKey: L('workbuddy.timezone_label'),
+    hintKey: L('workbuddy.timezone_hint'),
+    yamlKeys: ['workbuddy', 'timezone'],
+    keywords: ['workbuddy', 'timezone', 'iana'],
+  },
+  {
+    fieldId: 'workbuddyTasks',
+    sectionId: 'workbuddy',
+    labelKey: L('workbuddy.tasks_label'),
+    hintKey: L('workbuddy.tasks_hint'),
+    yamlKeys: ['workbuddy', 'tasks'],
+    keywords: [
+      'workbuddy',
+      'tasks',
+      'checkin',
+      'balance',
+      'keepalive',
+      'report',
+      'growth',
+      'travel',
+      'night-owl',
+      'sweep',
+      'compensation',
+      'streak',
+    ],
   },
 ];
 

@@ -28,6 +28,8 @@ const sections = {
   streaming: (await import('@/features/config/components/sections/SectionStreaming'))
     .SectionStreaming,
   advanced: (await import('@/features/config/components/sections/SectionAdvanced')).SectionAdvanced,
+  workbuddy: (await import('@/features/config/components/sections/SectionWorkBuddy'))
+    .SectionWorkBuddy,
 } as Record<string, ComponentType<Record<string, unknown>>>;
 
 const translations = i18n.cloneInstance({ lng: 'en' });

@@ -1,3 +1,5 @@
+import { WORKBUDDY_TASK_NAMES, type WorkBuddyTaskDraft } from './workBuddy';
+
 export type PayloadParamValueType = 'string' | 'number' | 'boolean' | 'json';
 export type DisableImageGenerationMode = 'false' | 'true' | 'chat' | 'passthrough';
 export type RoutingStrategy = 'round-robin' | 'weighted-round-robin' | 'fill-first';
@@ -37,7 +39,11 @@ export type VisualConfigFieldPath =
   | 'authAutoRefreshWorkers'
   | 'streaming.keepaliveSeconds'
   | 'streaming.bootstrapRetries'
-  | 'streaming.nonstreamKeepaliveInterval';
+  | 'streaming.nonstreamKeepaliveInterval'
+  | 'workbuddyWorkers'
+  | 'workbuddyRequestTimeout'
+  | 'workbuddyTimezone'
+  | 'workbuddyTasks';
 
 export type VisualConfigValidationErrorCode =
   | 'invalid_trusted_proxies'
@@ -53,7 +59,10 @@ export type VisualConfigValidationErrorCode =
   | 'port_range'
   | 'integer'
   | 'non_negative_integer'
-  | 'integer_range_1_3600';
+  | 'integer_range_1_3600'
+  | 'integer_range_0_64'
+  | 'invalid_daily_at'
+  | 'invalid_workbuddy_tasks';
 
 export type VisualConfigValidationErrors = Partial<
   Record<VisualConfigFieldPath, VisualConfigValidationErrorCode>
@@ -212,6 +221,12 @@ export type VisualConfigValues = {
   payloadOverrideRawRules: PayloadRule[];
   payloadFilterRules: PayloadFilterRule[];
   streaming: StreamingConfig;
+  workbuddyEnabled: boolean;
+  workbuddyStateDir: string;
+  workbuddyWorkers: string;
+  workbuddyRequestTimeout: string;
+  workbuddyTimezone: string;
+  workbuddyTasks: WorkBuddyTaskDraft[];
 };
 
 export const makeClientId = () => {
@@ -317,4 +332,16 @@ export const DEFAULT_VISUAL_VALUES: VisualConfigValues = {
     bootstrapRetries: '',
     nonstreamKeepaliveInterval: '',
   },
+  workbuddyEnabled: false,
+  workbuddyStateDir: '',
+  workbuddyWorkers: '',
+  workbuddyRequestTimeout: '',
+  workbuddyTimezone: '',
+  workbuddyTasks: WORKBUDDY_TASK_NAMES.map((name) => ({
+    name,
+    enabled: 'default',
+    interval: '',
+    dailyAt: '',
+    timeout: '',
+  })),
 };

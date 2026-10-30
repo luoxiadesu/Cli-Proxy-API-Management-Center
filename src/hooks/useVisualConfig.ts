@@ -17,6 +17,7 @@ import type {
   PayloadParamValidationErrorCode,
 } from '@/types/visualConfig';
 import { DEFAULT_VISUAL_VALUES } from '@/types/visualConfig';
+import type { WorkBuddyTaskDraft } from '@/types/workBuddy';
 import { assertConfigListsUnchanged, ConfigDraftConflictError } from '@/services/api/configPatch';
 import {
   ADDITION_FIELDS,
@@ -26,6 +27,15 @@ import {
   writeICEServers,
   validateVisualAdditions,
 } from '@/features/config/visualConfigAdditions';
+import {
+  areWorkBuddyTasksEqual,
+  getWorkBuddyDurationError,
+  getWorkBuddyTasksError,
+  getWorkBuddyTimezoneError,
+  getWorkBuddyWorkersError,
+  readWorkBuddyTasks,
+  serializeWorkBuddyTask,
+} from '@/features/config/visualConfigWorkBuddy';
 
 import {
   SERVER_FIELDS,
@@ -142,6 +152,60 @@ function setDisableImageGenerationInDoc(
   if (docHas(doc, path)) doc.setIn(path, false);
 }
 
+function setWorkBuddyTaskString(
+  doc: YamlDocument,
+  taskMap: YAMLMap,
+  key: string,
+  value: string
+): void {
+  const trimmed = value.trim();
+  if (trimmed !== '') setMapValue(doc, taskMap, key, trimmed);
+  else deleteMapValue(taskMap, key);
+}
+
+/**
+ * Apply only the fields that differ from the baseline, task by task. Tasks that were
+ * not edited are never materialized, and unknown task names/fields are preserved.
+ */
+function writeWorkBuddyTasksToDoc(
+  doc: YamlDocument,
+  baselineTasks: WorkBuddyTaskDraft[],
+  nextTasks: WorkBuddyTaskDraft[]
+): void {
+  const baselineByName = new Map(baselineTasks.map((task) => [task.name, task]));
+  for (const task of nextTasks) {
+    const baseline = baselineByName.get(task.name);
+    if (!baseline) continue;
+    const desired = serializeWorkBuddyTask(task);
+    const previous = serializeWorkBuddyTask(baseline);
+    const changedKeys = [...new Set([...Object.keys(previous), ...Object.keys(desired)])].filter(
+      (key) => JSON.stringify(desired[key]) !== JSON.stringify(previous[key])
+    );
+    if (changedKeys.length === 0) continue;
+
+    ensureMapInDoc(doc, ['workbuddy', 'tasks']);
+    const tasksMap = doc.getIn(['workbuddy', 'tasks'], true);
+    if (!isMap(tasksMap)) continue;
+    const taskMap = ensureMapValue(doc, tasksMap, task.name);
+
+    for (const key of changedKeys) {
+      if (key === 'enabled') {
+        // Omitted `enabled` means the backend default; never leave a stale boolean behind.
+        if (task.enabled === 'default') deleteMapValue(taskMap, 'enabled');
+        else setMapValue(doc, taskMap, 'enabled', task.enabled === 'enabled');
+      } else if (key === 'interval') {
+        setWorkBuddyTaskString(doc, taskMap, 'interval', task.interval);
+      } else if (key === 'daily-at') {
+        setWorkBuddyTaskString(doc, taskMap, 'daily-at', task.dailyAt);
+      } else if (key === 'timeout') {
+        setWorkBuddyTaskString(doc, taskMap, 'timeout', task.timeout);
+      }
+    }
+
+    if (taskMap.items.length === 0) deleteMapValue(tasksMap, task.name);
+  }
+}
+
 const PAYLOAD_DIRTY_FIELDS = [
   'payloadDefaultRules',
   'payloadDefaultRawRules',
@@ -198,6 +262,10 @@ export function getVisualConfigValidationErrors(
     maxRetryCredentials: getIntegerError(values.maxRetryCredentials),
     maxRetryInterval: getIntegerError(values.maxRetryInterval),
     authAutoRefreshWorkers: getIntegerError(values.authAutoRefreshWorkers),
+    workbuddyWorkers: getWorkBuddyWorkersError(values.workbuddyWorkers),
+    workbuddyRequestTimeout: getWorkBuddyDurationError(values.workbuddyRequestTimeout),
+    workbuddyTimezone: getWorkBuddyTimezoneError(values.workbuddyTimezone),
+    workbuddyTasks: getWorkBuddyTasksError(values.workbuddyTasks),
     'streaming.keepaliveSeconds': getIntegerError(values.streaming.keepaliveSeconds),
     'streaming.bootstrapRetries': getIntegerError(values.streaming.bootstrapRetries),
     'streaming.nonstreamKeepaliveInterval': getIntegerError(
@@ -1254,6 +1322,11 @@ function getNextDirtyFields(
       'routingStrategy',
       'routingSessionAffinity',
       'routingSessionAffinityTTL',
+      'workbuddyEnabled',
+      'workbuddyStateDir',
+      'workbuddyWorkers',
+      'workbuddyRequestTimeout',
+      'workbuddyTimezone',
     ] as Array<keyof VisualConfigValues>
   ).forEach(updateScalarDirty);
 
@@ -1282,6 +1355,12 @@ function getNextDirtyFields(
     updateDirty(
       'pluginStoreAuth',
       arePluginStoreAuthRulesEqual(nextValues.pluginStoreAuth, baselineValues.pluginStoreAuth)
+    );
+  }
+  if (Object.prototype.hasOwnProperty.call(patch, 'workbuddyTasks')) {
+    updateDirty(
+      'workbuddyTasks',
+      areWorkBuddyTasksEqual(nextValues.workbuddyTasks, baselineValues.workbuddyTasks)
     );
   }
 
@@ -1428,6 +1507,7 @@ function parseVisualValuesFromYaml(yamlContent: string): VisualConfigValues {
   const payload = asRecord(v8Requests?.['payload']);
   const streaming = asRecord(v8Requests?.['streaming']);
   const plugins = asRecord(parsed.plugins);
+  const workbuddy = asRecord(parsed?.['workbuddy']);
   const antigravity = asRecord(v8OauthProviders?.['antigravity']);
   const devin = asRecord(v8OauthProviders?.['devin']);
   const claudeHeaderDefaults = asRecord(v8UpstreamClaude?.['header-defaults']);
@@ -1539,6 +1619,14 @@ function parseVisualValuesFromYaml(yamlContent: string): VisualConfigValues {
       bootstrapRetries: String(streaming?.['bootstrap-retries'] ?? ''),
       nonstreamKeepaliveInterval: String(v8Requests?.['nonstream-keepalive-interval'] ?? ''),
     },
+
+    workbuddyEnabled: Boolean(workbuddy?.['enabled']),
+    workbuddyStateDir: typeof workbuddy?.['state-dir'] === 'string' ? workbuddy['state-dir'] : '',
+    workbuddyWorkers: String(workbuddy?.['workers'] ?? ''),
+    workbuddyRequestTimeout:
+      typeof workbuddy?.['request-timeout'] === 'string' ? workbuddy['request-timeout'] : '',
+    workbuddyTimezone: typeof workbuddy?.['timezone'] === 'string' ? workbuddy['timezone'] : '',
+    workbuddyTasks: readWorkBuddyTasks(workbuddy?.['tasks']),
   };
 
   return newValues;
@@ -1759,6 +1847,37 @@ export function useVisualConfig() {
             }
           }
           deleteIfMapEmpty(doc, ['plugins']);
+        }
+
+        const workbuddyDirty =
+          dirtyFields.has('workbuddyEnabled') ||
+          dirtyFields.has('workbuddyStateDir') ||
+          dirtyFields.has('workbuddyWorkers') ||
+          dirtyFields.has('workbuddyRequestTimeout') ||
+          dirtyFields.has('workbuddyTimezone') ||
+          dirtyFields.has('workbuddyTasks');
+        if (workbuddyDirty) {
+          ensureMapInDoc(doc, ['workbuddy']);
+          if (dirtyFields.has('workbuddyEnabled')) {
+            setBooleanInDoc(doc, ['workbuddy', 'enabled'], values.workbuddyEnabled);
+          }
+          if (dirtyFields.has('workbuddyStateDir')) {
+            setStringInDoc(doc, ['workbuddy', 'state-dir'], values.workbuddyStateDir);
+          }
+          if (dirtyFields.has('workbuddyWorkers')) {
+            setIntFromStringInDoc(doc, ['workbuddy', 'workers'], values.workbuddyWorkers);
+          }
+          if (dirtyFields.has('workbuddyRequestTimeout')) {
+            setStringInDoc(doc, ['workbuddy', 'request-timeout'], values.workbuddyRequestTimeout);
+          }
+          if (dirtyFields.has('workbuddyTimezone')) {
+            setStringInDoc(doc, ['workbuddy', 'timezone'], values.workbuddyTimezone);
+          }
+          if (dirtyFields.has('workbuddyTasks')) {
+            writeWorkBuddyTasksToDoc(doc, payloadBaseline.workbuddyTasks, values.workbuddyTasks);
+          }
+          deleteIfMapEmpty(doc, ['workbuddy', 'tasks']);
+          deleteIfMapEmpty(doc, ['workbuddy']);
         }
 
         if (dirtyFields.has('debug'))

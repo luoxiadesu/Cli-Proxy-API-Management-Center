@@ -1033,6 +1033,20 @@
     "filter_load_more": "Hiển thị thêm log phù hợp",
     "wrap_lines": "Tự động xuống dòng dài"
   },
+  "workbuddy": {
+    "taskNames": {
+      "checkin": "Điểm danh",
+      "balance": "Số dư",
+      "keepalive": "Duy trì",
+      "report": "Báo cáo",
+      "growth": "Tăng trưởng",
+      "travel": "Du lịch",
+      "night-owl": "Cú đêm",
+      "sweep": "Quét",
+      "compensation": "Bù trừ",
+      "streak": "Chuỗi ngày"
+    }
+  },
   "config_management": {
     "title": "Bảng cấu hình",
     "meta_fields": "{{count}} cài đặt",
@@ -1089,6 +1103,10 @@
         "no_results": "Không có cài đặt phù hợp"
       },
       "sections": {
+        "workbuddy": {
+          "title": "WorkBuddy",
+          "description": "Tác vụ định kỳ cho tài khoản WorkBuddy: công tắc bộ lập lịch, thời gian chờ và ghi đè từng tác vụ"
+        },
         "common": {
           "title": "Chung",
           "description": "Các cài đặt dùng nhiều nhất, dùng chung dữ liệu với các mục đầy đủ"
@@ -1303,6 +1321,31 @@
         "name_hint": "Được lưu ngay trong trình duyệt này, riêng cho từng máy chủ. Không bao gồm trong cấu hình máy chủ. Xóa trường này để xóa tên.",
         "name_save_error": "Không thể lưu tên vào bộ lưu trữ trình duyệt. Vui lòng kiểm tra cài đặt lưu trữ của trình duyệt."
       },
+      "workbuddy": {
+        "enabled_label": "Bật tác vụ định kỳ",
+        "enabled_hint": "Công tắc tổng của bộ lập lịch WorkBuddy. Khi tắt, không tác vụ nào chạy dù từng tác vụ đã bật.",
+        "state_dir_label": "Thư mục trạng thái",
+        "state_dir_hint": "Thư mục lưu trạng thái bộ lập lịch. Để trống để dùng mặc định của máy chủ.",
+        "workers_label": "Số luồng xử lý",
+        "workers_hint": "Số luồng tác vụ đồng thời tối đa (0–64). Để trống để dùng mặc định của máy chủ.",
+        "request_timeout_label": "Thời gian chờ yêu cầu",
+        "request_timeout_hint": "Thời gian chờ cho mỗi yêu cầu lên nguồn, ví dụ 30s. Để trống để dùng mặc định của máy chủ.",
+        "timezone_label": "Múi giờ",
+        "timezone_hint": "Múi giờ IANA dùng để tính lịch hằng ngày, ví dụ Asia/Shanghai. Để trống để dùng mặc định của máy chủ.",
+        "tasks_label": "Tác vụ",
+        "tasks_hint": "Ghi đè cho từng tác vụ. Để trống để kế thừa mặc định của máy chủ; \"Mặc định\" giữ nguyên trạng thái bật/tắt.",
+        "table_task": "Tác vụ",
+        "table_enabled": "Bật",
+        "table_interval": "Khoảng cách",
+        "table_daily_at": "Hằng ngày lúc",
+        "table_timeout": "Thời gian chờ",
+        "enabled_default": "Mặc định",
+        "enabled_on": "Bật",
+        "enabled_off": "Tắt",
+        "placeholder_interval": "24h",
+        "placeholder_daily_at": "08:00",
+        "placeholder_timeout": "30s"
+      },
       "payload_rules": {
         "rule": "Quy tắc",
         "models": "Model áp dụng",
@@ -1361,6 +1404,9 @@
         "payload_invalid_number": "Nhập số hợp lệ",
         "payload_invalid_boolean": "Chọn true hoặc false",
         "payload_invalid_json": "Nhập JSON hợp lệ",
+        "integer_range_0_64": "Nhập số nguyên từ 0 đến 64",
+        "invalid_daily_at": "Dùng định dạng 24 giờ, ví dụ 08:00",
+        "invalid_workbuddy_tasks": "Sửa các trường lịch tác vụ được đánh dấu",
         "invalid_trusted_proxies": "Mỗi proxy đáng tin cậy phải là một địa chỉ IP hoặc CIDR hợp lệ.",
         "invalid_discovery_service_type": "Sử dụng định dạng _tên._tcp: tên phải gồm 1–15 chữ cái, chữ số hoặc dấu gạch nối, không bắt đầu hoặc kết thúc bằng dấu gạch nối.",
         "invalid_duration": "Nhập khoảng thời gian hợp lệ, chẳng hạn như 30s hoặc 3h",

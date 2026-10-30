@@ -1076,6 +1076,20 @@
     "copy_success": "已复制日志原文",
     "copy_failed": "复制失败"
   },
+  "workbuddy": {
+    "taskNames": {
+      "checkin": "签到",
+      "balance": "余额",
+      "keepalive": "保活",
+      "report": "报告",
+      "growth": "成长",
+      "travel": "出行",
+      "night-owl": "夜猫子",
+      "sweep": "清扫",
+      "compensation": "补偿",
+      "streak": "连续打卡"
+    }
+  },
   "config_management": {
     "title": "配置面板",
     "meta_fields": "{{count}} 项配置",
@@ -1296,6 +1310,10 @@
         "no_results": "没有匹配的配置项"
       },
       "sections": {
+        "workbuddy": {
+          "title": "WorkBuddy",
+          "description": "WorkBuddy 账号的定时任务：调度开关、超时与各任务覆盖设置"
+        },
         "common": {
           "title": "常用",
           "description": "最常调整的配置项，与完整分区共享同一份数据"
@@ -1510,6 +1528,31 @@
           "strong": "很强"
         }
       },
+      "workbuddy": {
+        "enabled_label": "启用定时任务",
+        "enabled_hint": "WorkBuddy 调度器总开关。关闭后即使单个任务已启用也不会运行。",
+        "state_dir_label": "状态目录",
+        "state_dir_hint": "调度器状态目录。留空使用后端默认值。",
+        "workers_label": "工作线程数",
+        "workers_hint": "并发任务线程上限（0–64）。留空使用后端默认值。",
+        "request_timeout_label": "请求超时",
+        "request_timeout_hint": "每次上游请求的超时时间，例如 30s。留空使用后端默认值。",
+        "timezone_label": "时区",
+        "timezone_hint": "用于计算每日计划的 IANA 时区，例如 Asia/Shanghai。留空使用后端默认值。",
+        "tasks_label": "任务",
+        "tasks_hint": "各任务覆盖设置。留空继承后端默认值；“默认”表示不改变启用状态。",
+        "table_task": "任务",
+        "table_enabled": "启用",
+        "table_interval": "间隔",
+        "table_daily_at": "每日时间",
+        "table_timeout": "超时",
+        "enabled_default": "默认",
+        "enabled_on": "启用",
+        "enabled_off": "禁用",
+        "placeholder_interval": "24h",
+        "placeholder_daily_at": "08:00",
+        "placeholder_timeout": "30s"
+      },
       "payload_rules": {
         "rule": "规则",
         "models": "适用模型",
@@ -1561,6 +1604,9 @@
         "boolean_false": "false"
       },
       "validation": {
+        "integer_range_0_64": "请输入 0 到 64 之间的整数",
+        "invalid_daily_at": "请使用 24 小时制时间，例如 08:00",
+        "invalid_workbuddy_tasks": "请修正高亮的任务计划字段",
         "invalid_trusted_proxies": "每个可信代理必须是有效的 IP 地址或 CIDR。",
         "invalid_discovery_service_type": "请使用 _名称._tcp 格式：名称为 1–15 位英文字母、数字或连字符，首尾不能是连字符。",
         "validation_blocked": "请先修复表单校验错误再保存",

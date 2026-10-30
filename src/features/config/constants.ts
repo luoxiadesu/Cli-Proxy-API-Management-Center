@@ -7,6 +7,7 @@ import {
   IconScrollText,
   IconShield,
   IconSlidersHorizontal,
+  IconTimer,
   type IconProps,
 } from '@/components/ui/icons';
 import type { VisualConfigFieldPath } from '@/types/visualConfig';
@@ -25,11 +26,12 @@ export const CONFIG_SECTION_IDS = [
   'streaming',
   'advanced',
   'payload',
+  'workbuddy',
 ] as const satisfies readonly VisualSectionId[];
 
 export const CONFIG_TAB_IDS: readonly ConfigTabId[] = ['common', ...CONFIG_SECTION_IDS];
 
-/** 分区序号（01–06）。常用 tab 是别名视图，不占序号。 */
+/** 分区序号（01–07）。常用 tab 是别名视图，不占序号。 */
 export const SECTION_INDEX_LABELS: Record<VisualSectionId, string> = {
   connectivity: '01',
   network: '02',
@@ -37,6 +39,7 @@ export const SECTION_INDEX_LABELS: Record<VisualSectionId, string> = {
   streaming: '04',
   advanced: '05',
   payload: '06',
+  workbuddy: '07',
 };
 
 export const CONFIG_TAB_ICONS: Record<ConfigTabId, ComponentType<IconProps>> = {
@@ -47,6 +50,7 @@ export const CONFIG_TAB_ICONS: Record<ConfigTabId, ComponentType<IconProps>> = {
   streaming: IconSatellite,
   advanced: IconShield,
   payload: IconCode,
+  workbuddy: IconTimer,
 };
 
 /** 常用 tab 的 6 个字段（原简单模式），渲染源与正典分区共享（fields/sharedFields.tsx）。 */
@@ -92,6 +96,12 @@ export const SECTION_VALIDATION_FIELDS: Record<VisualSectionId, readonly VisualC
       'codexLiveMediaRelayICEServers',
     ],
     payload: [],
+    workbuddy: [
+      'workbuddyWorkers',
+      'workbuddyRequestTimeout',
+      'workbuddyTimezone',
+      'workbuddyTasks',
+    ],
   };
 
 /**
@@ -201,6 +211,13 @@ export const FIELD_VALUE_KEYS: Record<string, readonly string[]> = {
   payloadOverrideRules: ['payloadOverrideRules'],
   payloadOverrideRawRules: ['payloadOverrideRawRules'],
   payloadFilterRules: ['payloadFilterRules'],
+  // ── workbuddy ─────────────────────────────────────────────────────────────
+  workbuddyEnabled: ['workbuddyEnabled'],
+  workbuddyStateDir: ['workbuddyStateDir'],
+  workbuddyWorkers: ['workbuddyWorkers'],
+  workbuddyRequestTimeout: ['workbuddyRequestTimeout'],
+  workbuddyTimezone: ['workbuddyTimezone'],
+  workbuddyTasks: ['workbuddyTasks'],
 };
 
 /** tab / tabpanel 的 DOM id：单点定义，ConfigTabs 与页面侧面板用同一函数生成 aria 关联。 */

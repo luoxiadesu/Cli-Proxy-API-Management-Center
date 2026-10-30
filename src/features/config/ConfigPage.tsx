@@ -44,6 +44,7 @@ import { SectionLogging } from './components/sections/SectionLogging';
 import { SectionNetwork } from './components/sections/SectionNetwork';
 import { SectionPayload } from './components/sections/SectionPayload';
 import { SectionStreaming } from './components/sections/SectionStreaming';
+import { SectionWorkBuddy } from './components/sections/SectionWorkBuddy';
 import styles from './ConfigPage.module.scss';
 
 /** 首载入场预算：卡片延迟 0.28s + 0.45s 动画，之后关闭 animateIn，切 tab 不再重播。 */
@@ -286,6 +287,8 @@ export function ConfigPage() {
         return <SectionStreaming {...sectionProps} />;
       case 'advanced':
         return <SectionAdvanced {...sectionProps} />;
+      case 'workbuddy':
+        return <SectionWorkBuddy {...sectionProps} />;
       case 'payload':
         return (
           <SectionPayload

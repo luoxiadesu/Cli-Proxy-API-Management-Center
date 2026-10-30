@@ -1077,6 +1077,20 @@
     "copy_success": "로그를 클립보드에 복사했습니다",
     "copy_failed": "복사에 실패했습니다"
   },
+  "workbuddy": {
+    "taskNames": {
+      "checkin": "출석",
+      "balance": "잔액",
+      "keepalive": "유지",
+      "report": "보고서",
+      "growth": "성장",
+      "travel": "여행",
+      "night-owl": "올빼미",
+      "sweep": "정리",
+      "compensation": "보상",
+      "streak": "연속"
+    }
+  },
   "config_management": {
     "title": "설정 패널",
     "meta_fields": "설정 {{count}}개",
@@ -1297,6 +1311,10 @@
         "no_results": "일치하는 설정이 없습니다"
       },
       "sections": {
+        "workbuddy": {
+          "title": "WorkBuddy",
+          "description": "WorkBuddy 계정의 예약 작업: 스케줄러 스위치, 타임아웃, 작업별 재정의"
+        },
         "common": {
           "title": "일반",
           "description": "전체 섹션과 동일한 데이터를 기반으로 하는 가장 자주 사용하는 설정"
@@ -1511,6 +1529,31 @@
           "strong": "강함"
         }
       },
+      "workbuddy": {
+        "enabled_label": "예약 작업 사용",
+        "enabled_hint": "WorkBuddy 스케줄러의 전체 스위치입니다. 꺼두면 개별 작업이 켜져 있어도 실행되지 않습니다.",
+        "state_dir_label": "상태 디렉터리",
+        "state_dir_hint": "스케줄러 상태 디렉터리입니다. 비워 두면 백엔드 기본값을 사용합니다.",
+        "workers_label": "작업자 수",
+        "workers_hint": "동시 작업자 최대 수(0–64)입니다. 비워 두면 백엔드 기본값을 사용합니다.",
+        "request_timeout_label": "요청 타임아웃",
+        "request_timeout_hint": "각 업스트림 요청의 타임아웃입니다(예: 30s). 비워 두면 백엔드 기본값을 사용합니다.",
+        "timezone_label": "시간대",
+        "timezone_hint": "일일 일정을 계산할 IANA 시간대입니다(예: Asia/Shanghai). 비워 두면 백엔드 기본값을 사용합니다.",
+        "tasks_label": "작업",
+        "tasks_hint": "작업별 재정의입니다. 비워 두면 백엔드 기본값을 따르며, \"기본값\"은 사용 여부를 변경하지 않습니다.",
+        "table_task": "작업",
+        "table_enabled": "사용",
+        "table_interval": "간격",
+        "table_daily_at": "매일 시각",
+        "table_timeout": "타임아웃",
+        "enabled_default": "기본값",
+        "enabled_on": "사용",
+        "enabled_off": "사용 안 함",
+        "placeholder_interval": "24h",
+        "placeholder_daily_at": "08:00",
+        "placeholder_timeout": "30s"
+      },
       "payload_rules": {
         "rule": "규칙",
         "models": "적용 가능한 모델",
@@ -1562,6 +1605,9 @@
         "boolean_false": "false"
       },
       "validation": {
+        "integer_range_0_64": "0에서 64 사이의 정수를 입력하세요",
+        "invalid_daily_at": "24시간 형식을 사용하세요(예: 08:00)",
+        "invalid_workbuddy_tasks": "표시된 작업 일정 필드를 수정하세요",
         "invalid_trusted_proxies": "각 신뢰할 수 있는 프록시는 유효한 IP 주소 또는 CIDR이어야 합니다.",
         "invalid_discovery_service_type": "_name._tcp 형식을 사용하세요: 이름은 1~15자의 영문자, 숫자 또는 하이픈이어야 하며, 시작이나 끝에 하이픈이 올 수 없습니다.",
         "validation_blocked": "저장하기 전에 유효성 검사 오류를 수정하세요",

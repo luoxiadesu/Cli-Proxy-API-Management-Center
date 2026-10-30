@@ -1,0 +1,64 @@
+/* WorkBuddy task table: header + ten fixed rows, responsive down to two columns. */
+
+.table {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.headerRow,
+.row {
+  display: grid;
+  grid-template-columns: minmax(88px, 1.1fr) minmax(104px, 0.9fr) repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  align-items: start;
+}
+
+.headerRow {
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.row {
+  padding-top: 8px;
+  border-top: 1px solid var(--border-color);
+}
+
+.taskName {
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  padding-top: 6px;
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.cellError {
+  color: var(--error-color);
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+@media (max-width: 720px) {
+  .headerRow {
+    display: none;
+  }
+
+  .row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .taskName {
+    grid-column: 1 / -1;
+    padding-top: 0;
+  }
+}
