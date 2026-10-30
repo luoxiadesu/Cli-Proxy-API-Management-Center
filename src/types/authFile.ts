@@ -13,6 +13,7 @@ export type AuthFileType =
   | 'codex'
   | 'devin'
   | 'meta'
+  | 'workbuddy'
   | 'antigravity'
   | 'xai'
   | 'iflow'

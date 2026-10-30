@@ -16,6 +16,7 @@ import iconGrok from '@/assets/icons/grok.svg';
 import iconGrokDark from '@/assets/icons/grok-dark.svg';
 import iconDevin from '@/assets/icons/devin.svg';
 import iconDevinDark from '@/assets/icons/devin-dark.svg';
+import iconWorkBuddy from '@/assets/icons/workbuddy.svg';
 
 export type ThemedIcon = string | { light: string; dark: string };
 
@@ -126,6 +127,14 @@ export const OAUTH_PROVIDERS: BuiltInOAuthProviderCard[] = [
     titleKey: 'auth_login.devin_oauth_title',
     icon: { light: iconDevin, dark: iconDevinDark },
     flow: 'browser',
+  },
+  {
+    kind: 'builtin',
+    id: 'workbuddy',
+    label: 'WorkBuddy',
+    titleKey: 'auth_login.workbuddy_oauth_title',
+    icon: iconWorkBuddy,
+    flow: 'device',
   },
 ];
 

@@ -5,6 +5,7 @@ import iconCodex from '@/assets/icons/codex.svg';
 import iconMeta from '@/assets/icons/meta.svg';
 import iconDevin from '@/assets/icons/devin.svg';
 import iconDevinDark from '@/assets/icons/devin-dark.svg';
+import iconWorkBuddy from '@/assets/icons/workbuddy.svg';
 import iconGemini from '@/assets/icons/gemini.svg';
 import iconGrok from '@/assets/icons/grok.svg';
 import iconGrokDark from '@/assets/icons/grok-dark.svg';
@@ -60,6 +61,7 @@ export const OAUTH_PROVIDER_PRESETS = [
   'codex',
   'devin',
   'kimi',
+  'workbuddy',
 ];
 
 const OAUTH_PROVIDER_EXCLUDES = new Set(['all', 'unknown', 'empty']);
@@ -79,6 +81,7 @@ export const AUTH_FILE_MANUAL_REFRESH_PROVIDERS = new Set([
   'codex',
   'kimi',
   'xai',
+  'workbuddy',
 ]);
 
 // 标签类型颜色配置：权威版本在 @/utils/quota/constants.ts，此处仅转发
@@ -91,6 +94,7 @@ export const AUTH_FILE_ICONS: Record<string, AuthFileIconAsset> = {
   codex: iconCodex,
   meta: iconMeta,
   devin: { light: iconDevin, dark: iconDevinDark },
+  workbuddy: iconWorkBuddy,
   gemini: iconGemini,
   xai: { light: iconGrok, dark: iconGrokDark },
   iflow: iconIflow,
